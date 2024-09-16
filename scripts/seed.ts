@@ -96,7 +96,7 @@ const main = async () => {
                 lessonId:1,
                 type:"SELECT",
                 order:1,
-                question:'Which one of these is the "The Man"?',
+                question:'Which one of these is "The Man"?',
             },
         ])
 
