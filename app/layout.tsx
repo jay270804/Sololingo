@@ -6,6 +6,7 @@ import { ExitModal } from "@/components/modals/exit-modal";
 import "./globals.css";
 import { HeartsModal } from "@/components/modals/hearts-modal";
 import { PracticeModal } from "@/components/modals/practice-modal";
+import Script from "next/script";
 
 const font = Nunito({ subsets: ["latin"] });
 
@@ -31,6 +32,7 @@ export default function RootLayout({
           {children}
         </body>
       </html>
+      <Script src="https://checkout.razorpay.com/v1/checkout.js"/>
     </ClerkProvider>
   );
 }

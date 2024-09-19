@@ -2,10 +2,13 @@
 import db from "@/db/drizzle";
 import { getCourseById, getUserProgress } from "@/db/queries";
 import { challengeProgress, challenges, courses, userProgress } from "@/db/schema";
+import { initializeRazorpay } from "@/lib/stripe";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import Razorpay from "razorpay";
+
 
 //TODO: Move alongside  items component constant into a common file
 const POINTS_TO_REFILL = 10;

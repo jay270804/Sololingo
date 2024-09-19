@@ -2,7 +2,7 @@ import { cache } from "react";
 import db from "./drizzle";
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
-import { challengeOptions, challengeProgress, challenges, courses, lessons, units, userProgress } from "./schema";
+import { challengeOptions, challengeProgress, challenges, courses, lessons, units, userProgress, userSubscription } from "./schema";
 import { UserRoundIcon } from "lucide-react";
 
 export const getCourses = cache(async () => {
@@ -186,4 +186,25 @@ export const getLessonPercentage = cache(async () => {
     )
 
     return percentage;
+})
+
+const DAY_IN_MS=86_400_000;
+
+export const getUserSubscription= cache(async()=>{
+    const {userId}= await auth();
+
+    if(!userId) return null;
+
+    const data=await db.query.userSubscription.findFirst({
+        where:eq(userSubscription.userId,userId),
+    })
+
+    if(!data) return null;
+
+    const isActive = data.razorPayPriceId && data.razorPayCurrentPeriodEnd?.getTime()!+DAY_IN_MS>Date.now();
+
+    return({
+        ...data,
+        isActive: !!isActive,
+    })
 })
