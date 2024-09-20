@@ -18,6 +18,7 @@ const main = async () => {
         await db.delete(schema.challenges)
         await db.delete(schema.challengeOptions)
         await db.delete(schema.challengeProgress)
+        await db.delete(schema.userSubscription)
 
         await db.insert(schema.courses).values([
             {
@@ -54,6 +55,13 @@ const main = async () => {
                 title: "Unit 1",
                 description: "Learn the basics of Hindi",
                 order: 1,
+            },
+            {
+                id: 2,
+                courseId: 1,
+                title: "Unit 2",
+                description: "Learn the advance Hindi",
+                order: 2,
             }
         ])
 
@@ -85,6 +93,38 @@ const main = async () => {
             {
                 id: 5,
                 unitId: 1,
+                order: 5,
+                title: 'Tense'
+            },
+        ])
+        await db.insert(schema.lessons).values([
+            {
+                id: 6,
+                unitId: 2,
+                order: 1,
+                title: 'Nouns'
+            },
+            {
+                id: 7,
+                unitId: 2,
+                order: 2,
+                title: 'Verbs'
+            },
+            {
+                id: 8,
+                unitId: 2,
+                order: 3,
+                title: 'Adjectives'
+            },
+            {
+                id: 9,
+                unitId: 2,
+                order: 4,
+                title: 'Articles'
+            },
+            {
+                id: 10,
+                unitId: 2,
                 order: 5,
                 title: 'Tense'
             },
@@ -207,6 +247,7 @@ const main = async () => {
             },
 
         ])
+
 
         console.log("Seeding finished")
     } catch (error) {

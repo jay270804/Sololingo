@@ -2,11 +2,12 @@
 
 import {  refillHearts } from "@/actions/user-progress";
 import { Button } from "@/components/ui/button"
+import { POINTS_TO_REFILL } from "@/constants";
 import Image from "next/image"
-import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import {  useTransition } from "react";
 import { toast } from "sonner";
 
-const POINTS_TO_REFILL = 10;
 
 type Props = {
     hearts: number,
@@ -19,9 +20,9 @@ export const Items = ({
     points,
     hasActiveSubscription
 }: Props) => {
-
+    const router = useRouter();
     const [pending, startTransition] = useTransition();
-
+    // const user=await currentUser;
     const onRefillHearts = () => {
         if (pending || hearts === 5 || points < POINTS_TO_REFILL) {
             return;
@@ -38,48 +39,50 @@ export const Items = ({
         })
     }
 
-    const [loading, setLoading] = useState(false);
-
     const handleSubscribe = async () => {
-        setLoading(true);
-
-        // Call the backend to create a Razorpay order
-        const response = await fetch('/api/payment', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ amount: 269 }), // Example amount in INR
-        });
-
-        const { orderId } = await response.json();
-
+  
+      const planId = 'plan_OzEomYPi7EXmww'; // Replace with your Razorpay Plan ID
+    //   const razorPayPriceId = 'price_XXXXXXXX'; // Replace with Razorpay Price ID
+  
+      const response = await fetch('/api/payment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ planId}),
+      });
+  
+      const data = await response.json();
+  
+      if (data.success) {
         // Initialize Razorpay payment options
         const options = {
-            key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // Use NEXT_PUBLIC_ for frontend env variables
-            amount: 26900, // Amount in paise
-            currency: 'INR',
-            name: 'Sololingo',
-            description: 'Subscribe to premium',
-            order_id: orderId,
-            handler: async function (response: any) {
-                alert(`Payment successful! Payment ID: ${response.razorpay_payment_id}`);
-                // Handle payment success here
-            },
-            prefill: {
-                name: 'John Doe',
-                email: 'john.doe@example.com',
-                contact: '9999999999',
-            },
-            theme: {
-                color: '#F37254',
-            },
+          key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
+          subscription_id: data.subscriptionId,
+          name: 'Sololingo',
+          description: 'Get unlimited hearts with super sololingo.',
+          handler: async function (response: any) {
+            alert('Payment successful!');
+            router.refresh(); // Reload the same page
+          },
+          prefill: {
+            name: "Jay Patel",
+            email: "jaypatel270804@gmail.com",
+            contact: "9999999999",
+          },
+          theme: {
+            color: '#F37254',
+          },
         };
-
+  
         const razorpay = new (window as any).Razorpay(options);
         razorpay.open();
-        setLoading(false);
+      } else {
+        alert('Error in creating subscription.');
+      }
+  
     };
+  
     return (
         <ul className="w-full">
             <div className="flex items-center w-full p-4 border-t-2 gap-x-4">
@@ -128,9 +131,9 @@ export const Items = ({
                 </div>
                 <Button
                     onClick={onUpgrade}
-                    disabled={loading || pending || hasActiveSubscription}  //TODO:remove loading later
+                    disabled={ pending }  
                 >
-                    {hasActiveSubscription ? "active" : "upgrade"}
+                    {hasActiveSubscription ? "settings" : "upgrade"}
                 </Button>
             </div>
         </ul>

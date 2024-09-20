@@ -2,7 +2,7 @@
 
 import Confetti from "react-confetti"
 import { useRouter } from "next/navigation"
-import { challengeOptions, challenges } from "@/db/schema"
+import { challengeOptions, challenges, userSubscription } from "@/db/schema"
 import { useState, useTransition } from "react"
 import { Header } from "./header"
 import { QuestionBubble } from "./question-bubble"
@@ -11,7 +11,7 @@ import { Footer } from "./footer"
 import { upsertChallengeProgress } from "@/actions/challenge-progress"
 import { toast } from "sonner"
 import { reduceHearts } from "@/actions/user-progress"
-import { useAudio, useWindowSize, useMount, usePageLeave } from "react-use"
+import { useAudio, useWindowSize, useMount } from "react-use"
 import Image from "next/image"
 import { ResultCard } from "./result-card"
 import { useHeartsModal } from "@/store/use-hearts-model"
@@ -26,7 +26,9 @@ type Props = {
         completed: boolean,
         challengeOptions: typeof challengeOptions.$inferSelect[]
     })[],
-    userSubscription: any, //TODO: Replace with Subscription DB type 
+    userSubscription: typeof userSubscription.$inferSelect & {
+        isActive: boolean
+    } | null, //TODO: Replace with Subscription DB type 
 }
 
 export const Quiz = ({
@@ -37,10 +39,10 @@ export const Quiz = ({
     userSubscription
 }: Props) => {
     const { open: openHeartsModal } = useHeartsModal();
-    const {open:openPracticeModal}= usePracticeModal()
+    const { open: openPracticeModal } = usePracticeModal()
 
-    useMount(()=>{
-        if(initialPercentage===100){
+    useMount(() => {
+        if (initialPercentage === 100) {
             openPracticeModal()
         }
     })
@@ -65,8 +67,8 @@ export const Quiz = ({
     const [lessonId] = useState(initialLessonId)
     const [isPending, startTransition] = useTransition()
     const [hearts, setHearts] = useState(initialHearts)
-    const [percentage, setPercentage] = useState(()=>{
-        return initialPercentage===100? 0: initialPercentage;
+    const [percentage, setPercentage] = useState(() => {
+        return initialPercentage === 100 ? 0 : initialPercentage;
     })
     const [challenges] = useState(initialLessonChallenges)
     const [activeIndex, setActiveIndex] = useState(() => {

@@ -115,6 +115,6 @@ export const userSubscription=pgTable('user_subscription',{
     userId: text("user_id").notNull().unique(),
     razorPayCustomerId: text("razorpay_customer_id").notNull().unique(),
     razorPaySubscriptionId: text("razorpay_subscription_id").notNull().unique(),
-    razorPayPriceId:text("razorpay_price_id").notNull(),
+    // razorPayPriceId:text("razorpay_price_id").notNull(),
     razorPayCurrentPeriodEnd: timestamp("razorpay_current_period_end").notNull(),
 })

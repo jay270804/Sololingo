@@ -2,36 +2,43 @@ import { FeedWrapper } from "@/components/feed-wrapper";
 import { StickyWrapper } from "@/components/sticky-wrapper";
 import { Header } from "./header";
 import { UserProgress } from "@/components/user-progress";
-import { getCourseProgress, getLessonPercentage, getUnits, getUserProgress,} from "@/db/queries";
+import { getCourseProgress, getLessonPercentage, getUnits, getUserProgress, getUserSubscription, } from "@/db/queries";
 import { redirect } from "next/navigation";
 import { Unit } from "./unit";
+import { Promo } from "@/components/promo";
+import { Quests } from "@/components/quests";
 
 const LearnPage = async () => {
 
     const userProgressData = getUserProgress();
-    const courseProgressData= getCourseProgress();
-    const lessonPercentageData=getLessonPercentage();
-    const unitsData= getUnits();
+    const courseProgressData = getCourseProgress();
+    const lessonPercentageData = getLessonPercentage();
+    const unitsData = getUnits();
+    const userSubscriptionData = getUserSubscription();
 
     const [
         userProgress,
         units,
         lessonPercentage,
-        courseProgress
+        courseProgress,
+        userSubscription
     ] = await Promise.all([
         userProgressData,
         unitsData,
         lessonPercentageData,
         courseProgressData,
+        userSubscriptionData,
     ])
 
-    if(!userProgress|| !userProgress.activeCourse){
+    if (!userProgress || !userProgress.activeCourse) {
         redirect("/courses")
     }
 
-    if(!courseProgress){
+    if (!courseProgress) {
         redirect("/courses")
     }
+
+    const isPro = !!userSubscription?.isActive;
 
     return (
         <div className="flex flex-row-reverse gap-[48px] px-6 ">
@@ -40,15 +47,17 @@ const LearnPage = async () => {
                     activeCourse={userProgress.activeCourse}
                     hearts={userProgress.hearts}
                     points={userProgress.points}
-                    hasActiveSubscription={false}
+                    hasActiveSubscription={userSubscription?.isActive}
                 />
+                {!isPro && <Promo />}
+                <Quests points={userProgress.points} />
             </StickyWrapper>
             <FeedWrapper>
                 <Header title={userProgress.activeCourse.title} />
-                {units.map((unit)=>(
+                {units.map((unit) => (
                     <div className="mb-10" key={unit.id}>
                         {/* {JSON.stringify(unit)} */}
-                        <Unit 
+                        <Unit
                             id={unit.id}
                             order={unit.order}
                             description={unit.description}
@@ -59,7 +68,6 @@ const LearnPage = async () => {
                         />
                     </div>
                 ))}
-                
             </FeedWrapper>
         </div>
     )

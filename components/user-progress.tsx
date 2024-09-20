@@ -8,7 +8,7 @@ type Props = {
     activeCourse: typeof courses.$inferSelect,
     hearts: number,
     points: number,
-    hasActiveSubscription: boolean,
+    hasActiveSubscription: boolean | undefined,
 }
 
 export const UserProgress = ({

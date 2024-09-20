@@ -5,57 +5,61 @@ import { getUserProgress, getUserSubscription } from "@/db/queries";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import { Items } from "./items";
+import { Quests } from "@/components/quests";
 
 const ShopPage = async () => {
 
-    const userProgressData=  getUserProgress();
-    // const userSubscriptionData= getUserSubscription();
+    const userProgressData = getUserProgress();
+    const userSubscriptionData = getUserSubscription();
 
     const [
         userProgress,
-        // userSubscription
-    ]=await Promise.all([
+        userSubscription
+    ] = await Promise.all([
         userProgressData,
-        // userSubscriptionData
+        userSubscriptionData
     ])
 
-    if(!userProgress || !userProgress.activeCourse){
+    if (!userProgress || !userProgress.activeCourse) {
         redirect("/courses")
     }
 
-    // const isPro=!!userSubscription?.isActive;
+    const isPro = !!userSubscription?.isActive;
 
     return (
         <div className="flex flex-row-reverse gap-[48px] px-6">
             <StickyWrapper>
-                <UserProgress 
-                activeCourse={userProgress.activeCourse}
-                hearts={userProgress.hearts}
-                points={userProgress.points}
-                // hasActiveSubscription={false||isPro} //TODO: Remove false once userSubcscription error solved
-                hasActiveSubscription={false} //TODO: Remove false once userSubcscription error solved
+                <UserProgress
+                    activeCourse={userProgress.activeCourse}
+                    hearts={userProgress.hearts}
+                    points={userProgress.points}
+                    hasActiveSubscription={isPro} //TODO: Remove false once userSubcscription error solved
+                // hasActiveSubscription={false} //TODO: Remove false once userSubcscription error solved
                 />
+
+                <Quests points={userProgress.points} />
+
             </StickyWrapper>
 
             <FeedWrapper>
                 <div className="w-full flex flex-col items-center">
                     <Image
-                    src={"/shop.svg"}
-                    alt="shop"
-                    height={90}
-                    width={90}
+                        src={"/shop.svg"}
+                        alt="shop"
+                        height={90}
+                        width={90}
                     />
                     <h1 className="text-center font-bold text-neutral-800 text-2xl my-6">
-                    Shop
+                        Shop
                     </h1>
                     <p className="text-muted-foreground text-center text-lg mb-6 ">
                         Spend your points on cool stuff.
                     </p>
                     <Items
-                    hearts={userProgress.hearts}
-                    points={userProgress.points}
-                    // hasActiveSubscription={false||isPro} //TODO: Remove false once userSubcscription error solved
-                    hasActiveSubscription={false} //TODO: Remove false once userSubcscription error solved
+                        hearts={userProgress.hearts}
+                        points={userProgress.points}
+                        hasActiveSubscription={isPro} //TODO: Remove false once userSubcscription error solved
+                    // hasActiveSubscription={false} //TODO: Remove false once userSubcscription error solved
                     />
                 </div>
             </FeedWrapper>
