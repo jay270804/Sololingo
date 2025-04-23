@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🌍 Sololingo
 
-## Getting Started
+Sololingo is a Duolingo-inspired language learning web application built with a modern tech stack. It offers a gamified learning experience that helps users master new languages through interactive lessons, quizzes, and challenges.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Language Lessons**: Choose from multiple languages and complete lessons tailored to different skill levels.
+- **Progress Tracking**: Rounded progress bars visually show your learning journey.
+- **Hearts System**: Lose hearts on wrong answers. When depleted, a modal prompts actions like practicing previous lessons or subscribing.
+- **Practice Mode**: Revisit completed lessons to strengthen understanding.
+- **Gamification**:
+  - Earn points for correct answers
+  - Complete daily/weekly quests
+  - Climb the leaderboard against other learners
+- **Subscription System**: Unlock premium features like unlimited hearts, exclusive content, and more.
+- **Responsive UI**: Built using **Shadcn/ui** and Tailwind for a clean, intuitive interface.
+- **AI Chatbot Integration**: Practice conversations with a chatbot powered by **Langchain**, **Ollama**, and **Llama 3.1**.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## 🧱 Tech Stack
 
-## Learn More
+| Layer         | Tech                                      |
+| ------------- | ----------------------------------------- |
+| Frontend      | Next.js, Tailwind CSS, Shadcn/ui          |
+| Backend       | Django / FastAPI (for chatbot & APIs)     |
+| Database      | DrizzleORM with Neon (PostgreSQL)         |
+| Auth          | Clerk                                     |
+| Payments      | Razorpay                                  |
+| AI/LLM        | Langchain + Ollama + Llama 3.1            |
+| Realtime Comm | Socket connection between Next.js & Python|
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📦 Installation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+1. **Clone the repo**  
+   ```bash
+   git clone https://github.com/your-username/sololingo.git
+   cd sololingo
+2. **Install frontend dependencies**
+    ```bash
+    npm install
+3. **Start the dev server**
+    ```bash
+    npm run dev
+---
+ 
